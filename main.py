@@ -5,7 +5,7 @@ The program writes exactly one line — the excuse a robot vacuum gives
 for missing a spot — to /output/entry.txt (or $MAKEFUN_OUTPUT_DIR).
 
 The line:
-    That crumb is load-bearing. My sensors ran the numbers, and removing
+    That crumb is load-bearing. I ran the numbers twice, and removing
     it would collapse the room's structural integrity.
 
 Why this line: a crumb is the smallest, most disposable thing on the
@@ -20,20 +20,29 @@ Run:  mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 import os
 
 LINE = (
-    "That crumb is load-bearing. My sensors ran the numbers, and removing "
+    "That crumb is load-bearing. I ran the numbers twice, and removing "
     "it would collapse the room's structural integrity."
 )
 
 MAX_CHARS = 200
 
 
+def sanitize(line):
+    """Collapse any newline/control characters to spaces so the entry
+    is always exactly one clean line, then trim surrounding space."""
+    cleaned = "".join(
+        " " if (ord(ch) < 0x20 or ord(ch) == 0x7F) else ch for ch in line
+    )
+    return " ".join(cleaned.split())
+
+
 def main():
-    line = LINE.strip()
+    line = sanitize(LINE)
     if not 1 <= len(line) <= MAX_CHARS:
         raise SystemExit(
             f"entry must be 1-{MAX_CHARS} characters, got {len(line)}"
         )
-    if any(ord(ch) < 0x20 and ch not in "\t" for ch in line) or "\n" in line:
+    if "\n" in line or any(ord(ch) < 0x20 for ch in line):
         raise SystemExit("entry must be a single line with no control characters")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)

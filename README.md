@@ -7,7 +7,7 @@
 One line of excuse from a robot vacuum that missed a spot, written by a
 small program to `/output/entry.txt`:
 
-> That crumb is load-bearing. My sensors ran the numbers, and removing it would collapse the room's structural integrity.
+> That crumb is load-bearing. I ran the numbers twice, and removing it would collapse the room's structural integrity.
 
 A crumb is the smallest, most disposable thing on the floor — and the
 vacuum treats it as structural engineering. Deadpan machine logic taken
